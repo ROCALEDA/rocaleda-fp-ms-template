@@ -1,0 +1,11 @@
+runtime: python311
+
+service: rocaleda-fp-ms-template
+
+entrypoint: uvicorn main:app --port 8000
+
+instance_class: F2
+
+vpc_access_connector:
+    name: projects/PROJECT_ID/locations/REGION/connectors/CONNECTOR_NAME
+    egress_setting: all-traffic

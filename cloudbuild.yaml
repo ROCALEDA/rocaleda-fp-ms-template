@@ -1,0 +1,36 @@
+# - name: 'python:3.11-slim'
+steps:
+
+# INSTALL DEPENDENCIES STEP
+#- name: 'python'
+#  entrypoint: 'bash'
+#  args:
+#      - -c
+#      - |
+#        python -m pip install --upgrade pip # optional
+#        pip install -r requirements.txt --user
+#        pip install pytest pytest-cov --user
+
+# TESTS STEP
+#- name: 'python'
+#  entrypoint: 'python'
+#  args: ["-m", "pytest", "--cov=app", "--cov-fail-under=70", "tests/"]
+
+# BUILD STEP - Ya hecho desde app engine; en otros casos (Cloud Run o Kubernetes), usar docker build + push a Artifact Registry
+
+# DEPLOY STEP
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+      - -c
+      - |
+        # echo 'user defined substitution candidate must start with underscore'
+        # echo 'example is : substitution vpc is '$_VPC_CONNECTOR_NAME
+        # echo 'default substitutions don't need initial underscore; example: '
+        # echo 'example is : the region associated with your build is '$LOCATION
+        sed -i "s|VAR_SERVICENAME1_MS|$_SERVICE_NAME1_URL|g" app.yaml
+        sed -i "s|VAR_PROJECT_ID|$PROJECT_ID|g" app.yaml
+        sed -i "s|VAR_REGION|$LOCATION|g" app.yaml
+        sed -i "s|VAR_VPC_CONNECTOR|$_VPC_CONNECTOR_NAME|g" app.yaml
+        gcloud app deploy
+timeout: "1600s"

@@ -1,24 +1,4 @@
-# - name: 'python:3.11-slim'
 steps:
-
-# INSTALL DEPENDENCIES STEP
-#- name: 'python'
-#  entrypoint: 'bash'
-#  args:
-#      - -c
-#      - |
-#        python -m pip install --upgrade pip # optional
-#        pip install -r requirements.txt --user
-#        pip install pytest pytest-cov --user
-
-# TESTS STEP
-#- name: 'python'
-#  entrypoint: 'python'
-#  args: ["-m", "pytest", "--cov=app", "--cov-fail-under=70", "tests/"]
-
-# BUILD STEP - Ya hecho desde app engine; en otros casos (Cloud Run o Kubernetes), usar docker build + push a Artifact Registry
-
-# DEPLOY STEP
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
